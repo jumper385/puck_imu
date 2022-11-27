@@ -1,0 +1,14 @@
+// This file will be overwritten on each session.
+// Any manual changes made to this file will be lost.
+
+void OnProjectLoad (void) {
+    Project.SetDevice ("nRF52832_xxAA");
+    Project.SetHostIF ("USB", "801042453");
+    Project.SetTargetIF ("SWD");
+    Project.SetTIFSpeed ("4 MHz");
+    Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
+    Project.AddSvdFile ("c:\ncs\v2.0.2\modules\hal\nordic\nrfx\mdk\nrf52.svd");
+    Project.SetOSPlugin ("ZephyrPlugin.js");
+    File.Open ("c:\Users\henry\Documents\embedded-projects\puck_imu\nrf52dk_build\zephyr\zephyr.elf");
+    Window.Show ("Zephyr");
+}
