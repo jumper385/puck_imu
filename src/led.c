@@ -1,9 +1,5 @@
 #include <zephyr.h>
 #include <zephyr/drivers/gpio.h>
-#include <zephyr/device.h>
-#include <zephyr/drivers/sensor.h>
-#include <zephyr/drivers/i2c.h>
-#include <zephyr/drivers/sensor.h>
 
 #define GREEN_LED_NODE DT_ALIAS(green_led)
 #define RED_LED_NODE DT_ALIAS(red_led)
@@ -14,6 +10,21 @@ struct led {
 	int sleep_time;
 	int id;
 };
+
+void blink(struct led led_config){
+	int ret;
+
+	ret = gpio_pin_configure_dt(&led_config.spec, GPIO_OUTPUT_ACTIVE);
+
+	if (ret < 0) return;
+
+	while(1) {
+		ret = gpio_pin_toggle_dt(&led_config.spec);
+		if (ret < 0) return;
+
+		k_msleep(led_config.sleep_time);
+	}
+}
 
 void blink_red(void) {
 	struct led led_config = {
@@ -42,18 +53,3 @@ void blink_blue(void) {
 	};
 	blink(led_config);
 };
-
-void blink(struct led led_config){
-	int ret;
-
-	ret = gpio_pin_configure_dt(&led_config.spec, GPIO_OUTPUT_ACTIVE);
-
-	if (ret < 0) return;
-
-	while(1) {
-		ret = gpio_pin_toggle_dt(&led_config.spec);
-		if (ret < 0) return;
-
-		k_msleep(led_config.sleep_time);
-	}
-}
